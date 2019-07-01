@@ -2,7 +2,7 @@ Believe Core
 =================================================
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-More information at [https://believenetwork.io]
+More information at [https://believecore.io]
 
 ### Coin Specs
 
