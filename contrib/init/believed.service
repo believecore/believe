@@ -1,0 +1,26 @@
+[Unit]
+Description=Believe's distributed currency daemon
+After=network.target
+
+[Service]
+User=believe
+Group=believe
+
+Type=forking
+PIDFile=/var/lib/believed/believed.pid
+
+ExecStart=/usr/bin/believed -daemon -pid=/var/lib/believed/believed.pid \
+          -conf=/etc/believe/believe.conf -datadir=/var/lib/believed
+
+ExecStop=-/usr/bin/believe-cli -conf=/etc/believe/believe.conf \
+         -datadir=/var/lib/believed stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

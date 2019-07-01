@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Believe
+Comment=Believe P2P Cryptocurrency
+Exec=believe-qt %u
+Terminal=false
+Type=Application
+Icon=believe128
+MimeType=x-scheme-handler/believe;
+Categories=Office;Finance;
+Name[en_US]=believe-qt.desktop

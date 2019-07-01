@@ -1,0 +1,26 @@
+# /etc/conf.d/believed: config file for /etc/init.d/believed
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/believe/believe.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/believed"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/believed.pid"
+
+# Where to write believed data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/believed"
+
+# User and group to own believed process
+#BITCOIND_USER="believe"
+#BITCOIND_GROUP="believe"
+
+# Path to believed executable
+#BITCOIND_BIN="/usr/bin/believed"
+
+# Nice value to run believed under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""
