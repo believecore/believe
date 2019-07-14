@@ -11,8 +11,6 @@
 #include "util.h"
 #include "utilstrencodings.h"
 
-#include "base58.h"
-
 #include <assert.h>
 
 #include <boost/assign/list_of.hpp>
@@ -82,18 +80,6 @@ static const Checkpoints::CCheckpointData dataRegtest = {
     0,
     100};
 
-std::string CChainParams::GetTreasuryRewardAddressAtHeight(int nHeight) const {
-    return vTreasuryRewardAddress;
-}
-
-CScript CChainParams::GetTreasuryRewardScriptAtHeight(int nHeight) const {
-    CBitcoinAddress address(GetTreasuryRewardAddressAtHeight(nHeight).c_str());
-    assert(address.IsValid());
-
-    CScript script = GetScriptForDestination(address.Get());
-    return script; 
-}
-
 class CMainParams : public CChainParams
 {
 public:
@@ -114,7 +100,7 @@ public:
         vAlertPubKey = ParseHex("044d3297dbed0fe340d9c83cada97ca32be26fe83f1e949862030d62fdb253062f3f7c529bacbb43a7f1f223ea738de1c2b8e702b6c2354ded1c48a607dd633041");
         nDefaultPort = 33672;
         bnProofOfWorkLimit = ~uint256(0) >> 1;
-        nSubsidyHalvingInterval = 2102400;
+        nSubsidyHalvingInterval = 2102400;// 4years:blocktime 1min 525600 block/year
         nMaxReorganizationDepth = 100;
         nEnforceBlockUpgradeMajority = 750;
         nRejectBlockOutdatedMajority = 950;
@@ -158,7 +144,7 @@ public:
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime = 1561939200;//7/1/2019 @ 12:00am (UTC)
+        genesis.nTime = 1561939200;// 7/1/2019 @ 12:00am (UTC)
         genesis.nBits = 0x1e0ffff0;
         genesis.nNonce = 2177672;
 
@@ -199,7 +185,6 @@ public:
 
         nPoolMaxTransactions = 3;
         strSporkKey = "045e4ff4616b7683915e58cf58c087ed2c5301b15556798df91646cfef9df69c2ec766984e4388e1e05ba8a239c4573bd2c8178f39df973b7a6c2fbc96e00a3313";
-        vTreasuryRewardAddress="BA52eamKxBAgEmjWzEQGkx3FF3otYxPGm7";
         strMasternodePoolDummyAddress = "BHWQ9EfPAMVUHHHK87hFsTfPmPkvZ5EbYE";
         nStartMasternodePayments = genesis.nTime + 86400; // 24 hours after genesis creation
 

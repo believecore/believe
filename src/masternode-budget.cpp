@@ -581,49 +581,6 @@ void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, b
     }
 }
 
-void CBudgetManager::FillTreasuryBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake)
-{
-    CBlockIndex* pindexPrev = chainActive.Tip();
-    if (!pindexPrev) return;
-
-    CScript payee;
- 
-    CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
-    payee = Params().GetTreasuryRewardScriptAtHeight(pindexPrev->nHeight);
-    CAmount treasurePayment = blockValue - GetPosValue(pindexPrev->nHeight);
-
-	if (fProofOfStake) {
-		/**For Proof Of Stake vout[0] must be null
-		 * Stake reward can be split into many different outputs, so we must
-		 * use vout.size() to align with several different cases.
-		 * An additional output is appended as the masternode payment
-		 */
-		unsigned int i = txNew.vout.size();
-		txNew.vout.resize(i + 1);
-		txNew.vout[i].scriptPubKey = payee;
-		txNew.vout[i].nValue = treasurePayment;
-		
-		if (txNew.vout.size() == 4) { //here is a situation: if stake was split, subtraction from the last one may give us negative value, so we have split it
-			//subtract treasury payment from the stake reward
-			txNew.vout[i - 1].nValue -= treasurePayment/2;
-			txNew.vout[i - 2].nValue -= treasurePayment/2;
-		} else {
-			//subtract treasury payment from the stake reward
-			txNew.vout[i - 1].nValue -= treasurePayment;
-		}
-	} else {
-		txNew.vout.resize(2);
-		txNew.vout[1].scriptPubKey = payee;
-		txNew.vout[1].nValue = treasurePayment;
-		txNew.vout[0].nValue = blockValue - treasurePayment;
-	}
-
-	CTxDestination address1;
-	ExtractDestination(payee, address1);
-	CBitcoinAddress address2(address1);
-
-}
-
 CFinalizedBudget* CBudgetManager::FindFinalizedBudget(uint256 nHash)
 {
     if (mapFinalizedBudgets.count(nHash))
@@ -952,7 +909,7 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
     if (nHeight == 0) {
         nSubsidy = 0;
     } else if (nHeight > 0 && nHeight < 11000) {
-        nSubsidy = 1 * COIN;
+        nSubsidy = 0.95 * COIN;
     } else if (nHeight >= 11000 && nHeight < 250000) {
         nSubsidy = 25 * COIN;
     } else if (nHeight >= 250000 && nHeight < 750000) {

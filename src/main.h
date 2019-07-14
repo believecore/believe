@@ -237,8 +237,6 @@ CAmount GetBlockValue(int nHeight);
 
 CAmount GetTotalValue(int nHeight);
 CAmount GetPosValue(int nHeight);
-bool IsTreasuryBlock(int nHeight);
-int64_t GetTreasuryAward(int nHeight);
 
 /** Create a new block index entry for a given block hash */
 CBlockIndex* InsertBlockIndex(uint256 hash);

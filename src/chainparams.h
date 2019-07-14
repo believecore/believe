@@ -98,10 +98,6 @@ public:
     int64_t Budget_Fee_Confirmations() const { return nBudget_Fee_Confirmations; }
     CBaseChainParams::Network NetworkID() const { return networkID; }
 
-    std::string vTreasuryRewardAddress;
-    std::string GetTreasuryRewardAddressAtHeight(int height) const;
-    CScript GetTreasuryRewardScriptAtHeight(int height) const;
-    
 protected:
     CChainParams() {}
 

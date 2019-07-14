@@ -1555,7 +1555,7 @@ int64_t GetTotalValue(int nHeight)
     if (nHeight == 0) {
         nSubsidy = 1080000 * COIN;//4%
     } else if (nHeight > 0 && nHeight < 11000) {
-        nSubsidy = 1 * COIN;
+        nSubsidy = 0.95 * COIN;
     } else if (nHeight >= 11000 && nHeight < 250000) {
         nSubsidy = 25 * COIN;
     } else if (nHeight >= 250000 && nHeight < 750000) {
@@ -1569,7 +1569,7 @@ int64_t GetTotalValue(int nHeight)
     } else if (nHeight >= 2250000 && nHeight < 3000000) {
         nSubsidy = 2 * COIN;
     } else {
-        nSubsidy =  1 * COIN;
+        nSubsidy = 1 * COIN;
     }
 
     return nSubsidy;
@@ -1584,19 +1584,19 @@ int64_t GetPosValue(int nHeight)
     } else if (nHeight > 0 && nHeight < 11000) {
         nSubsidy = 0.53 * 1 * COIN;
     } else if (nHeight >= 11000 && nHeight < 250000) {
-        nSubsidy = 0.53 * 25 * COIN;
+        nSubsidy = 0.55 * 25 * COIN;
     } else if (nHeight >= 250000 && nHeight < 750000) {
         nSubsidy = 0.5 * 15 * COIN;
     } else if (nHeight >= 750000 && nHeight < 1250000) {
-        nSubsidy = 0.47 * 10 * COIN;
+        nSubsidy = 0.48 * 10 * COIN;
     } else if (nHeight >= 1250000 && nHeight < 1750000) {
-        nSubsidy = 0.44 * 5 * COIN;
+        nSubsidy = 0.45 * 5 * COIN;
     } else if (nHeight >= 1750000 && nHeight < 2250000) {
-        nSubsidy = 0.42 * 3 * COIN;
+        nSubsidy = 0.43 * 3 * COIN;
     } else if (nHeight >= 2250000 && nHeight < 3000000) {
-        nSubsidy = 0.4 * 2 * COIN;
+        nSubsidy = 0.41 * 2 * COIN;
     } else {
-        nSubsidy = 0.35 * 1 * COIN;
+        nSubsidy = 0.39 * 1 * COIN;
     }
 
     return nSubsidy;
@@ -1611,12 +1611,7 @@ int64_t GetBlockValue(int nHeight)
             return 5000 * COIN;
     }
 
-    if(IsTreasuryBlock(nHeight)) {
-		nSubsidy = GetTreasuryAward(nHeight);
-    } else {
-        nSubsidy = GetTotalValue(nHeight);
-        if(nHeight > 0) nSubsidy *= 0.95;
-    }
+    nSubsidy = GetTotalValue(nHeight);
 
     // Check if we reached the coin max supply.
     int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;
@@ -1626,38 +1621,6 @@ int64_t GetBlockValue(int nHeight)
 
     if (nMoneySupply >= Params().MaxMoneyOut())
         nSubsidy = 0;
-    
-    return nSubsidy;
-}
-
-int nStartTreasuryBlock = 24999;
-int nTreasuryBlockStep = 25000;
-
-bool IsTreasuryBlock(int nHeight)
-{
-	if(nHeight < nStartTreasuryBlock)
-		return false;
-	else if((nHeight-nStartTreasuryBlock) % nTreasuryBlockStep == 0)
-		return true;
-	else
-		return false;
-}
-
-int64_t GetTreasuryAward(int nHeight)
-{
-    int64_t nSubsidy = 0;
-
-	if(IsTreasuryBlock(nHeight)) {
-        //one month 21600: 25000 block, 5% - reward to PoS
-        if(nHeight==nStartTreasuryBlock)
-        {
-            nSubsidy = (11000 * GetTotalValue(10000) + (nTreasuryBlockStep - 11000) * GetTotalValue(nHeight)) * 0.05 + GetPosValue(nHeight);
-        } 
-        else
-        {
-            nSubsidy = nTreasuryBlockStep * GetTotalValue(nHeight) * 0.05 + GetPosValue(nHeight);
-        }
-	}
     
     return nSubsidy;
 }
